@@ -23,10 +23,28 @@ def get_student():
     """Show information about a student."""
 
     github = request.args.get('github', 'sdevelops')
+    title_grade = hackbright.get_grades_by_github(github)
+
     first, last, github = hackbright.get_student_by_github(github)
-    html = render_template("student_info.html", first=first, last=last, github=github)
+    html = render_template("student_info.html", 
+                           first=first, 
+                           last=last, 
+                           github=github, 
+                           title_grade=title_grade)
 
     return html
+
+
+@app.route("/project/<project_title>")
+def display_project_details(project_title):
+    """Display title, description, and max grade of project"""
+
+    title, description, max_grade = hackbright.get_project_by_title(project_title)
+
+    return render_template("project_info.html", 
+                           title=title,
+                           description=description,
+                           max_grade=max_grade)
 
 
 @app.route("/student-add")
