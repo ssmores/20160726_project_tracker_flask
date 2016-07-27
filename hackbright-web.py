@@ -4,6 +4,15 @@ import hackbright
 
 app = Flask(__name__)
 
+@app.route("/")
+def display_homepage():
+    """Shows homepage with options to add or search for a student."""
+
+    return render_template("index.html")
+
+
+
+
 @app.route("/student-search")
 def get_student_form():
     """Show form for searching for a student."""
@@ -22,17 +31,22 @@ def get_student():
     return html
 
 
-@app.route("/student-add", methods=['POST'])
+@app.route("/student-add")
 def student_add():
     """Add new student."""
 
     return render_template("new_student.html")
 
-@app.route("/confirmation")
+
+@app.route("/confirmation", methods=['POST'])
 def display_confirmation():
     """Display confirmation message."""
 
-    first_name = request.form.get()
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    github = request.form.get("github")
+
+    hackbright.make_new_student(first_name, last_name, github)
 
     return render_template("student_confirmation.html", 
         first=first_name, last=last_name, github=github)
